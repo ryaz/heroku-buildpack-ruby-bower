@@ -100,7 +100,7 @@ class LanguagePack::Ruby < LanguagePack::Base
         install_node
         install_bower
         build_bower
-        resolve_bower
+        # resolve_bower
         run_assets_precompile_rake_task
       end
       super
