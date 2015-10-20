@@ -100,6 +100,7 @@ class LanguagePack::Ruby < LanguagePack::Base
         install_node
         install_bower
         build_bower
+        resolve_bower
         run_assets_precompile_rake_task
       end
       super
@@ -637,6 +638,19 @@ ERROR
       run("curl #{BOWER_BASE_URL}/bower-#{bower_version}/node_modules.tar.gz -s -o - | tar xzf -")
       unless $?.success?
         error "Can't install Bower #{bower_version}. You can specify the version listed on http://heroku-buildpack-ruby-bower.s3-website-us-east-1.amazonaws.com/"
+      end
+    end
+  end
+
+  def resolve_bower
+    log("bower") do
+      topic("Resolving assets paths")
+
+      pipe("bundle exec rake bower:resolve 2>&1")
+      if $?.success?
+        log "bower", :status => "success"
+      else
+        error "Resolving failed"
       end
     end
   end
